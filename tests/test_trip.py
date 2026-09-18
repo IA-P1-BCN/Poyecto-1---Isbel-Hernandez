@@ -1,15 +1,14 @@
-import unittest
-from src.domain.trip import Trip, VehicleState
 from decimal import Decimal
+from src.domain.trip import Trip, VehicleState
 
 
-class TripTests(unittest.TestCase):
-    def test_start_activates_trip(self):
-        trip = Trip()
-        trip.start()
+def test_start_activates_trip():
+    trip = Trip()
 
-        self.assertTrue(trip.is_active)
-        self.assertEqual(trip.state, VehicleState.STOPPED)
+    trip.start()
+
+    assert trip.is_active is True
+    assert trip.state == VehicleState.STOPPED
 
 class FakeClock:
     def __init__(self):

@@ -17,7 +17,7 @@ class Trip:
         self.is_active = False
         self.state = None
         self.total_fare = Decimal("0")
-        self.last_update = None
+        self.last_updated = None
 
     def start(self):
         self.is_active = True
