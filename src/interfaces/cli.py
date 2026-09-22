@@ -1,4 +1,6 @@
 from src.domain.trip import Trip, VehicleState
+from src.infrastructure.history import load_history, save_trip
+from datetime import datetime
 
 
 def main():
@@ -7,6 +9,14 @@ def main():
 
     while True:
         command = input("> ").strip().lower()
+
+        if command == "history":
+            history = load_history()
+
+            for trip in history:
+             print(trip)
+
+            continue
 
         if command == "exit":
             return
@@ -30,6 +40,15 @@ def main():
 
                 elif command == "finish":
                     total = trip.finish()
+
+                    trip_data = {
+                        "date" : datetime.now().isoformat(),
+                        "duration" : trip.duration,
+                        "amount" : str(total)
+                     }
+
+                    save_trip (trip_data)
+
                     print(f"Total: {total:.2f} €")
 
                 else:

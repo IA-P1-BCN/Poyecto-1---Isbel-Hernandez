@@ -19,12 +19,17 @@ class Trip:
         self.state = None
         self.total_fare = Decimal("0")
         self.last_updated = None
+        self.started_at = None
+        self.duration = 0
+        
 
     def start(self):
         self.is_active = True
         self.state = VehicleState.STOPPED
         self.total_fare = Decimal("0")
-        self.last_updated = self.clock()     
+        self.last_updated = self.clock()
+        self.started_at = self.last_updated   
+          
 
     def _current_rate(self):
       if self.state == VehicleState.STOPPED:
@@ -43,6 +48,9 @@ class Trip:
 
     def finish(self):
         self._update_fare()
+        duration = self.clock() - self.started_at
         self.is_active = False
-        return self.total_fare    
+        return self.total_fare 
+
+    
     
