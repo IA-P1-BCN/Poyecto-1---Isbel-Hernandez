@@ -1,19 +1,20 @@
 from enum import Enum
 from time import monotonic
 from decimal import Decimal
-
+from src.infrastructure.config import load_tariffs
 
 
 class VehicleState(Enum):
     STOPPED = "stopped"
     MOVING = "moving"
 
-STOPPED_RATE = Decimal("0.02")
-MOVING_RATE = Decimal("0.05")   
 
 class Trip:
-    def __init__(self, clock=monotonic):
+    def __init__(self, clock=monotonic, stopped_rate=None, moving_rate=None):
+        tariffs = load_tariffs()
         self.clock = clock
+        self.stopped_rate = stopped_rate if stopped_rate is not None else tariffs["stopped_rate"]
+        self.moving_rate = moving_rate if moving_rate is not None else tariffs["moving_rate"]
         self.is_active = False
         self.state = None
         self.total_fare = Decimal("0")
@@ -26,9 +27,9 @@ class Trip:
         self.last_updated = self.clock()     
 
     def _current_rate(self):
-        if self.state == VehicleState.STOPPED:
-            return STOPPED_RATE
-        return MOVING_RATE         
+      if self.state == VehicleState.STOPPED:
+        return self.stopped_rate
+      return self.moving_rate         
 
     def _update_fare(self):
         now = self.clock()
