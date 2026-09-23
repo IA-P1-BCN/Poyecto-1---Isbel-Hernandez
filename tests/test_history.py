@@ -1,6 +1,7 @@
 import json
 
 from src.infrastructure.history import load_history, save_trip
+from datetime import datetime
 
 
 def test_save_trip(tmp_path, monkeypatch):
@@ -34,7 +35,9 @@ def test_load_history(tmp_path, monkeypatch):
     )
 
     trip_data = {
-        "date": "2026-09-22T14:30:00",
+        "date": datetime.now().replace(
+    hour=14, minute=30, second=0, microsecond=0
+        ).isoformat(),
         "duration": 120,
         "amount": "1.40"
     }

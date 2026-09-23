@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from datetime import datetime
 
 HISTORY_PATH = Path("data/history.jsonl")
 
@@ -12,6 +13,12 @@ def load_history():
     if not HISTORY_PATH.exists():
         return []
 
+    today = datetime.now().date()
+
     with HISTORY_PATH.open() as file:
-        return [json.loads(line) for line in file if line.strip()]
-    
+        history = [json.loads(line) for line in file if line.strip()]
+
+    return [
+        trip for trip in history
+        if datetime.fromisoformat(trip["date"]).date() == today
+    ]
