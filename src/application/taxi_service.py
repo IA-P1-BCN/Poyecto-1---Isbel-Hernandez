@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from src.infrastructure.auth import verify_password
 from src.domain.trip import Trip, VehicleState
 from src.infrastructure.history import save_trip
 from src.infrastructure.logger import setup_logger
@@ -10,6 +10,9 @@ class TaxiService:
     def __init__(self):
         self.logger = setup_logger()
         self.trip = None
+
+    def authenticate(self, password):
+        return verify_password(password)    
 
     def start_trip(self):
         tariffs = load_tariffs()

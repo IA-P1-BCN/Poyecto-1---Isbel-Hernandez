@@ -5,6 +5,12 @@ from src.domain.trip import VehicleState
 def main():
     service = TaxiService()
 
+    password = input("Contraseña: ")
+
+    if not service.authenticate(password):
+       print("Contraseña incorrecta")
+       return
+
     print("Taxímetro")
     print("Comandos: start, moving, stopped, finish, history, exit")
 
