@@ -1,24 +1,21 @@
-from src.domain.trip import Trip, VehicleState
-from src.infrastructure.history import load_history, save_trip
-from datetime import datetime
-from src.infrastructure.logger import setup_logger
+from src.application.taxi_service import TaxiService
+from src.domain.trip import VehicleState
 
 
 def main():
-    logger = setup_logger()
-    logger.info("Sistema iniciado")
+    service = TaxiService()
 
     print("Taxímetro")
-    print("Comandos: start, moving, stopped, finish, exit")
+    print("Comandos: start, moving, stopped, finish, history, exit")
 
     while True:
         command = input("> ").strip().lower()
 
         if command == "history":
-            history = load_history()
+            history = service.get_history()
 
             for trip in history:
-             print(trip)
+                print(trip)
 
             continue
 
@@ -26,42 +23,28 @@ def main():
             return
 
         if command == "start":
-            trip = Trip()
-            trip.start()
-            logger.info("Carrera iniciada")
-
+            service.start_trip()
             print("Carrera iniciada")
 
-            while trip.is_active:
+            while service.trip.is_active:
                 command = input("> ").strip().lower()
 
                 if command == "moving":
-                    trip.change_state(VehicleState.MOVING)
+                    service.change_state(VehicleState.MOVING)
                     print("Vehículo en movimiento")
-                    logger.info("Vehículo en movimiento")
 
                 elif command == "stopped":
-                    trip.change_state(VehicleState.STOPPED)
+                    service.change_state(VehicleState.STOPPED)
                     print("Vehículo parado")
-                    logger.info("Vehículo parado")
 
                 elif command == "finish":
-                    total = trip.finish()
-                    logger.info("Carrera finalizada")
-
-                    trip_data = {
-                        "date" : datetime.now().isoformat(),
-                        "duration" : trip.duration,
-                        "amount" : str(total)
-                     }
-
-                    save_trip (trip_data)
-
+                    total = service.finish_trip()
                     print(f"Total: {total:.2f} €")
 
                 else:
                     print("Comando no válido")
-                    logger.error(f"Comando no válido: {command}")
+                    service.log_error(f"Comando no válido: {command}")
+                    
 
         else:
             print("Comando no válido")
