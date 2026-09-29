@@ -22,7 +22,11 @@ class FakeClock:
 
 def test_trip_accumulates_fare_over_time():
     clock = FakeClock()
-    trip = Trip(clock=clock)
+    trip = Trip(
+    clock=clock,
+    stopped_rate=Decimal("0.02"),
+    moving_rate=Decimal("0.05")
+)
 
     trip.start()
     clock.advance(10)
@@ -33,7 +37,11 @@ def test_trip_accumulates_fare_over_time():
 
 def test_trip_uses_moving_rate_after_state_change():
     clock = FakeClock()
-    trip = Trip(clock=clock)
+    trip = Trip(
+        clock=clock,
+        stopped_rate=Decimal("0.02"),
+        moving_rate=Decimal("0.05")
+)
 
     trip.start()
     clock.advance(10)
@@ -47,7 +55,11 @@ def test_trip_uses_moving_rate_after_state_change():
 
 def test_trip_accumulates_fare_across_state_changes():
     clock = FakeClock()
-    trip = Trip(clock=clock)
+    trip = Trip(
+            clock=clock,
+            stopped_rate=Decimal("0.02"),
+            moving_rate=Decimal("0.05")
+    )
 
     trip.start()
     clock.advance(10)
@@ -64,7 +76,11 @@ def test_trip_accumulates_fare_across_state_changes():
 
 def test_finish_deactivates_trip_and_returns_fare():
     clock = FakeClock()
-    trip = Trip(clock=clock)
+    trip = Trip(
+            clock=clock,
+            stopped_rate=Decimal("0.02"),
+            moving_rate=Decimal("0.05")
+)
 
     trip.start()
     clock.advance(10)
